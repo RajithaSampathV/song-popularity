@@ -8,3 +8,5 @@ requests
 streamlit
 fastapi
 python-multipart
+plotly
+soundfile

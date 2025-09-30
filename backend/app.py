@@ -6,7 +6,6 @@ from typing import List, Optional
 import joblib
 import numpy as np
 import pandas as pd
-import librosa
 
 from fastapi import FastAPI, UploadFile, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -80,6 +79,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+def convert_to_wav(input_path: str, output_path: str) -> None:
+    """
+    Convert any audio file to WAV format using librosa.
+    
+    Args:
+        input_path: Path to the input audio file
+        output_path: Path where the WAV file will be saved
+    """
+    try:
+        # Load audio with librosa (automatically resamples to 22050 Hz by default)
+        y, sr = librosa.load(input_path, sr=22050)  # Standard sample rate
+        
+        # Save as WAV file
+        import soundfile as sf
+        sf.write(output_path, y, sr, subtype='PCM_16')
+        
+    except Exception as e:
+        raise RuntimeError(f"Audio conversion failed: {str(e)}")
+
 # ------------------------- Endpoint ----------------------------------
 @app.post("/predict_file", response_model=PredictResponse)
 async def predict_file(
@@ -89,14 +107,36 @@ async def predict_file(
     # Validate genre
     if track_genre not in GENRES:
         raise HTTPException(status_code=400, detail=f"Unknown genre: {track_genre}")
-    # Save to a temp file so librosa can read any format ffmpeg supports
-    with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
-        tmp_file.write(await file.read())
-        tmp_path = tmp_file.name
+    
+    # Validate file type
+    allowed_extensions = {'.wav', '.mp3', '.m4a', '.flac', '.aac', '.ogg', '.wma'}
+    file_extension = os.path.splitext(file.filename)[1].lower()
+    
+    if file_extension not in allowed_extensions:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Unsupported file format. Allowed formats: {', '.join(allowed_extensions)}"
+        )
+
+    # Save uploaded file to temp location
+    with tempfile.NamedTemporaryFile(delete=False, suffix=file_extension) as input_tmp_file:
+        input_tmp_file.write(await file.read())
+        input_tmp_path = input_tmp_file.name
+
+    # Create temp file for WAV conversion
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as wav_tmp_file:
+        wav_tmp_path = wav_tmp_file.name
 
     try:
-        # Read bytes again to feed your extractor (works from bytes directly)
-        with open(tmp_path, "rb") as f:
+        # Convert to WAV if not already WAV
+        if file_extension != '.wav':
+            convert_to_wav(input_tmp_path, wav_tmp_path)
+            audio_file_path = wav_tmp_path
+        else:
+            audio_file_path = input_tmp_path
+
+        # Read the WAV file and extract features
+        with open(audio_file_path, "rb") as f:
             feats = extract_heuristic_features_from_audio(
                 f.read(),
                 track_genre=str(track_genre),
@@ -121,7 +161,13 @@ async def predict_file(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Prediction error: {e}")
     finally:
+        # Clean up temporary files
         try:
-            os.remove(tmp_path)
+            os.remove(input_tmp_path)
+        except Exception:
+            pass
+        try:
+            if os.path.exists(wav_tmp_path):
+                os.remove(wav_tmp_path)
         except Exception:
             pass
