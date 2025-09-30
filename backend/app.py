@@ -6,6 +6,7 @@ from typing import List, Optional
 import joblib
 import numpy as np
 import pandas as pd
+import librosa
 
 from fastapi import FastAPI, UploadFile, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
