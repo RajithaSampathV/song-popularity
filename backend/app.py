@@ -12,8 +12,6 @@ from fastapi import FastAPI, UploadFile, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-import extract_features
-import normalize_output
 from extract_features import extract_heuristic_features_from_audio
 from normalize_output import normalize_song_features
 
