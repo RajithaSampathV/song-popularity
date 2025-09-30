@@ -1,1 +1,8 @@
-# This is for requirements.txt
+fastapi
+uvicorn[standard]
+scikit-learn
+joblib
+numpy
+pydantic
+requests
+streamlit
