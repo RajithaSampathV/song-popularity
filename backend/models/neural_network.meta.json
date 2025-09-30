@@ -1,0 +1,28 @@
+{
+  "model_name": "Neural Network",
+  "file": "neural_network.joblib",
+  "framework": "scikit-learn",
+  "type": "regression",
+  "features": [
+    "duration_ms",
+    "explicit",
+    "danceability",
+    "key",
+    "loudness",
+    "mode",
+    "speechiness",
+    "acousticness",
+    "instrumentalness",
+    "liveness",
+    "valence",
+    "tempo",
+    "time_signature",
+    "track_genre"
+  ],
+  "target": "popularity",
+  "metrics": {
+    "rmse": 19.78351411174555,
+    "mae": 15.485860489489122,
+    "r2": 0.14805496498396953
+  }
+}

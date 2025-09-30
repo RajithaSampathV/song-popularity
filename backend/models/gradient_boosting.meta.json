@@ -1,0 +1,28 @@
+{
+  "model_name": "Gradient Boosting",
+  "file": "gradient_boosting.joblib",
+  "framework": "scikit-learn",
+  "type": "regression",
+  "features": [
+    "duration_ms",
+    "explicit",
+    "danceability",
+    "key",
+    "loudness",
+    "mode",
+    "speechiness",
+    "acousticness",
+    "instrumentalness",
+    "liveness",
+    "valence",
+    "tempo",
+    "time_signature",
+    "track_genre"
+  ],
+  "target": "popularity",
+  "metrics": {
+    "rmse": 19.177689957593635,
+    "mae": 15.009882982869819,
+    "r2": 0.19943372949131832
+  }
+}

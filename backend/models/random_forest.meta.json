@@ -1,0 +1,28 @@
+{
+  "model_name": "Random Forest",
+  "file": "random_forest.joblib",
+  "framework": "scikit-learn",
+  "type": "regression",
+  "features": [
+    "duration_ms",
+    "explicit",
+    "danceability",
+    "key",
+    "loudness",
+    "mode",
+    "speechiness",
+    "acousticness",
+    "instrumentalness",
+    "liveness",
+    "valence",
+    "tempo",
+    "time_signature",
+    "track_genre"
+  ],
+  "target": "popularity",
+  "metrics": {
+    "rmse": 16.3266699495301,
+    "mae": 11.626908790528214,
+    "r2": 0.4197703350619941
+  }
+}
