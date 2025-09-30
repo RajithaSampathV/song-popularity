@@ -10,3 +10,4 @@ fastapi
 python-multipart
 plotly
 soundfile
+librosa
