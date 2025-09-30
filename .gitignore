@@ -61,3 +61,6 @@ tmp_*
 backend/models/*
 !backend/models/random_forest.joblib
 !backend/models/random_forest.meta.json
+!backend/models/scaler.joblib
+!backend/models/track_genre_encoder.joblib
+

@@ -6,3 +6,5 @@ numpy
 pydantic
 requests
 streamlit
+fastapi
+python-multipart
