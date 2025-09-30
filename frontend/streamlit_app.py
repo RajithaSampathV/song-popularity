@@ -55,7 +55,7 @@ if uploaded_file:
         try:
             with open(tmp_file_path, "rb") as f:
                 files = {"file": (os.path.basename(tmp_file_path), f, "audio/mpeg")}
-                data = {"genre": genre}
+                data = {"track_genre": genre}
                 status_text.text("Sending request to backend...")
                 r = requests.post(API_URL, files=files, data=data)
             progress_bar.progress(70, text="Processing...")
