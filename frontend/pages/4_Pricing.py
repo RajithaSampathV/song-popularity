@@ -133,4 +133,3 @@ for i, (plan, details) in enumerate(plans.items()):
 # --- Redirect to Payment Page ---
 if selected_plan:
     st.session_state["selected_plan"] = selected_plan
-    st.switch_page("pages/payment.py")
