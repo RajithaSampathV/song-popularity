@@ -1,7 +1,7 @@
 # Use a slim Python image
 FROM python:3.10-slim
 
-# System dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     libsndfile1 \
@@ -11,18 +11,15 @@ RUN apt-get update && apt-get install -y \
 # Set working directory
 WORKDIR /app
 
-# Copy project files
+# Copy backend code into container
 COPY . /app
 
 # Install dependencies
 RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Cloud Run expects app to listen on $PORT
-ENV PORT=8080
-
-# Expose the same port
+# Expose port Cloud Run expects
 EXPOSE 8080
 
-# Start FastAPI using uvicorn on the correct port
-CMD exec uvicorn app:app --host 0.0.0.0 --port ${PORT}
+# Start FastAPI with uvicorn (use port 8080, not 8000)
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]
