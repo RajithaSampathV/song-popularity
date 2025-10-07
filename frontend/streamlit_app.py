@@ -36,7 +36,7 @@ genre = st.selectbox(
     ["pop", "rock", "hip-hop", "electronic", "j-pop", "classical", "acoustic"]
 )
 
-API_URL = "http://127.0.0.1:8000/predict_file"
+API_URL = "https://song-predictor-800986629929.asia-south1.run.app/predict_file"
 
 if uploaded_file:
     # Display audio player

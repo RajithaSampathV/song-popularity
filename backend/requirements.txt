@@ -5,9 +5,9 @@ joblib
 numpy
 pydantic
 requests
-streamlit
 fastapi
 python-multipart
 plotly
 soundfile
 librosa
+pandas
