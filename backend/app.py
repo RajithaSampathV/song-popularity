@@ -15,7 +15,7 @@ app = FastAPI(title="Song Popularity Predictor")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # tighten in production
+    allow_origins=["*"], 
     allow_methods=["*"],
     allow_headers=["*"],
 )
