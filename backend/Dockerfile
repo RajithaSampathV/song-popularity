@@ -8,18 +8,21 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Set work directory
+# Set working directory
 WORKDIR /app
 
-# Copy backend code
+# Copy project files
 COPY . /app
 
-# Install Python dependencies
+# Install dependencies
 RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose FastAPI port
+# Cloud Run expects app to listen on $PORT
+ENV PORT=8080
+
+# Expose the same port
 EXPOSE 8080
 
-# Start the app with Uvicorn
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]
+# Start FastAPI using uvicorn on the correct port
+CMD exec uvicorn app:app --host 0.0.0.0 --port ${PORT}
