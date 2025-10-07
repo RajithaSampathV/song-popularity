@@ -1,4 +1,3 @@
-# frontend/streamlit_app.py
 import streamlit as st
 import requests
 import os
@@ -16,7 +15,8 @@ st.sidebar.title("🎵 About")
 st.sidebar.info(
     """
     Upload your MP3 song and select the genre.
-    Our AI model predicts the song's popularity score (0-100).
+    Our AI model predicts the song's popularity score (0-100) 
+    and provides a brief insight about why.
     """
 )
 
@@ -63,10 +63,15 @@ if uploaded_file:
             if r.status_code == 200:
                 result = r.json()
                 popularity = result.get("popularity_rounded", 0)
+                insight = result.get("insight", "No insight available")
                 progress_bar.progress(100, text="Done!")
 
                 # --- Display metric card ---
                 st.metric(label="🎵 Predicted Popularity", value=f"{popularity}/100")
+
+                # --- Display AI insight ---
+                st.markdown("### 💡 AI Insight")
+                st.info(insight)
 
                 # --- Interactive Plotly gauge chart ---
                 fig = go.Figure(go.Indicator(
