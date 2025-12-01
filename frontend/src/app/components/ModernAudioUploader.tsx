@@ -84,14 +84,14 @@ const CustomAudioPlayer: React.FC<{ file: File }> = ({ file }) => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-purple-900/40 to-blue-900/40 rounded-xl p-6 backdrop-blur-sm border border-purple-500/30">
+    <div className="bg-linear-to-br from-purple-900/40 to-blue-900/40 rounded-xl p-6 backdrop-blur-sm border border-purple-500/30">
       {audioUrl && <audio ref={audioRef} src={audioUrl} />}
 
       <div className="flex items-center gap-4">
         {/* Play/Pause Button */}
         <button
           onClick={togglePlay}
-          className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 flex items-center justify-center hover:scale-110 transition-transform shadow-lg shadow-purple-500/50"
+          className="w-12 h-12 rounded-full bg-linear-to-r from-purple-600 to-blue-600 flex items-center justify-center hover:scale-110 transition-transform shadow-lg shadow-purple-500/50"
         >
           {isPlaying ? (
             <Pause className="w-5 h-5 text-white" fill="white" />
@@ -234,7 +234,7 @@ const ModernAudioUploader: React.FC<Props> = ({ onResult }) => {
         onClick={() => fileInputRef.current?.click()}
         className={`relative border-2 border-dashed rounded-2xl p-12 transition-all cursor-pointer
           ${isDragging ? "border-purple-500 bg-purple-500/10 scale-105" : "border-gray-600 hover:border-purple-400"}
-          ${file ? "bg-gradient-to-br from-purple-500/20 to-blue-500/20" : "bg-gray-800/50"}`}
+          ${file ? "bg-linear-to-br from-purple-500/20 to-blue-500/20" : "bg-gray-800/50"}`}
       >
         <input
           ref={fileInputRef}
@@ -297,7 +297,7 @@ const ModernAudioUploader: React.FC<Props> = ({ onResult }) => {
       <button
         onClick={handleSubmit}
         disabled={!file || loading}
-        className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 rounded-xl
+        className="w-full bg-linear-to-r from-purple-600 to-blue-600 text-white py-4 rounded-xl
           font-semibold text-lg transition-all transform hover:scale-105 hover:shadow-2xl
           hover:shadow-purple-500/50 disabled:opacity-50 disabled:cursor-not-allowed
           disabled:transform-none flex items-center justify-center gap-2"
