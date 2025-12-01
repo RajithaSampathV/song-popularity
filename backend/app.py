@@ -9,7 +9,7 @@ from pydantic import BaseModel
 
 from extract_features import extract_heuristic_features_from_audio
 from normalize_output import normalize_song_features
-from ai_insight import generate_song_insight  # ✅ new import
+from ai_insight import generate_song_insight 
 
 # ------------------------- FastAPI app -------------------------
 app = FastAPI(title="Song Popularity Predictor + AI Insights")
