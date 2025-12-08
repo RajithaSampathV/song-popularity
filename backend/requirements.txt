@@ -11,3 +11,4 @@ plotly
 soundfile
 librosa
 pandas
+google-generativeai
