@@ -206,7 +206,7 @@ const ModernAudioUploader: React.FC<Props> = ({ onResult }) => {
     try {
       setLoading(true);
       const res = await fetch(
-        "https://song-predictor-800986629929.asia-south1.run.app/predict_file",
+        "https://rajithasampath-song-popularity.hf.space/predict_file",
         {
           method: "POST",
           body: formData,
