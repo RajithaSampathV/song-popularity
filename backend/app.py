@@ -1,5 +1,3 @@
-# backend/app.py
-
 import os
 import tempfile
 from typing import Optional
@@ -8,10 +6,13 @@ import pandas as pd
 from fastapi import FastAPI, UploadFile, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+
 from extract_features import extract_heuristic_features_from_audio
 from normalize_output import normalize_song_features
+from ai_insight import generate_song_insight 
+
 # ------------------------- FastAPI app -------------------------
-app = FastAPI(title="Song Popularity Predictor")
+app = FastAPI(title="Song Popularity Predictor + AI Insights")
 
 app.add_middleware(
     CORSMiddleware,
@@ -55,6 +56,8 @@ GENRES = [
 class PredictResponse(BaseModel):
     popularity: float
     popularity_rounded: int
+    features: Optional[dict] = None
+    insight: Optional[str] = None  # ✅ added insight field
 
 # ------------------------- Helper Functions -------------------------
 def lazy_load_models():
@@ -117,30 +120,39 @@ async def predict_file(file: UploadFile, track_genre: str = Form(...)):
         if ext != ".wav":
             convert_to_wav(input_path, wav_path)
 
+        # Extract features
         with open(audio_path, "rb") as f:
             feats = extract_heuristic_features_from_audio(f.read(), track_genre=track_genre)
 
         norm_feats = normalize_song_features(feats)
         X = pd.DataFrame([norm_feats], columns=FEATURE_ORDER)
 
+        # Predict popularity
         pred = MODEL.predict(X)
         popularity = float(pred[0])
         popularity = max(0.0, min(100.0, popularity))
 
+        # ✅ Generate AI insight
+        insight_text = generate_song_insight(feats, popularity)
+
+        # Return everything together
         return PredictResponse(
             popularity=popularity,
-            popularity_rounded=int(round(popularity))
+            popularity_rounded=int(round(popularity)),
+            features=feats,
+            insight=insight_text
         )
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Prediction error: {e}")
     finally:
-        # Cleanup temporary files
         try: os.remove(input_path)
         except: pass
         try: os.remove(wav_path)
         except: pass
 
-# ------------------------- Run server (Cloud Run) -------------------------
+
+# ------------------------- Run server (local/dev) -------------------------
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 8080))
